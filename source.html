@@ -1,0 +1,66 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Predicting IMF-Based Exchange Rates</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<style>
+body{
+    color: rgb(230, 0, 255);
+    background-color: chartreuse;
+}
+</style>
+<body>
+	<h1>Predicting IMF-Based Exchange Rates</h1>
+	<form action="predict.php" method="post">
+		<label for="gdp">GDP:</label>
+		<input type="number" id="gdp" name="gdp"><br><br>
+		<label for="inflation">Inflation Rate:</label>
+		<input type="number" id="inflation" name="inflation"><br><br>
+		<label for="interest_rate">Interest Rate:</label>
+		<input type="number" id="interest_rate" name="interest_rate"><br><br>
+		<input type="submit" value="Predict Exchange Rate">
+	</form>
+</body>
+</html>
+
+predict.php
+
+<?php
+// Collect input values
+$gdp = $_POST['gdp'];
+$inflation = $_POST['inflation'];
+$interest_rate = $_POST['interest_rate'];
+
+// Load regression model
+$model = load_model('regression_model.php');
+
+// Predict exchange rate
+$exchange_rate = predict_exchange_rate($model, $gdp, $inflation, $interest_rate);
+
+// Display result
+echo "Predicted Exchange Rate: " . $exchange_rate;
+
+regression_model.php (simplified example)
+
+<?php
+function load_model() {
+	// Load regression model coefficients from database or file
+	$coefficients = array(
+		'gdp' => 0.5,
+		'inflation' => 0.3,
+		'interest_rate' => 0.2
+	);
+	return $coefficients;
+}
+
+function predict_exchange_rate($model, $gdp, $inflation, $interest_rate) {
+	// Calculate predicted exchange rate using regression model
+	$exchange_rate = $model['gdp'] * $gdp + $model['inflation'] * $inflation + $model['interest_rate'] * $interest_rate;
+	return $exchange_rate;
+}
+
